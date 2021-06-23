@@ -1,112 +1,40 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow strict-local
- */
-
 import React from 'react';
-import type {Node} from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
+import {View, Text, Button, StyleSheet} from 'react-native';
+import Box1 from './src/components/Box1';
+import Box2 from './src/components/Box2';
+import Box3 from './src/components/Box3';
+import {useSelector, useDispatch} from 'react-redux';
+import * as calActions from './src/actions/cal.action';
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+const App = () => {
+  const calReducer = useSelector(({calReducer}) => calReducer);
+  const loginReducer = useSelector(({loginReducer}) => loginReducer);
+  const dispatch = useDispatch();
 
-const Section = ({children, title}): Node => {
-  const isDarkMode = useColorScheme() === 'dark';
   return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
+    <View style={styles.root}>
+      <Text style={styles.header}>ReactNative Redux Hook</Text>
+      <Text style={{fontSize: 30}}>{calReducer.count}</Text>
+      <Text style={{fontSize: 30}}>
+        {loginReducer.username}, {loginReducer.password}
       </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
+      <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
+        <Button title="ADD" onPress={() => dispatch(calActions.add())} />
+        <Button title="REM" onPress={() => dispatch(calActions.remove())} />
+        <Button title="CLR" onPress={() => dispatch(calActions.clear(0))} />
+      </View>
+
+      <Box1 style={{...styles.box, backgroundColor: 'yellow'}} />
+      <Box2 style={{...styles.box, backgroundColor: 'red'}} />
+      <Box3 style={{...styles.box, backgroundColor: 'green'}} />
     </View>
   );
 };
 
-const App: () => Node = () => {
-  const isDarkMode = useColorScheme() === 'dark';
-
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
-
-  return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.js</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
-        </View>
-      </ScrollView>
-    </SafeAreaView>
-  );
-};
-
 const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
-  },
+  root: {flex: 1, flexDirection: 'column'},
+  header: {fontSize: 30},
+  box: {flex: 1},
 });
 
 export default App;
